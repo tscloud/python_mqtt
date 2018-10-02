@@ -8,7 +8,7 @@ import sqlite3
 print 'create sqlite DB & table...'
 
 try:
-    sqlite_conn = sqlite3.connect('/home/tscloud/mqtt_db/kegstats.db')
+    sqlite_conn = sqlite3.connect('/home/pi/mqtt_db/kegstats.db')
     sqlite_cur = sqlite_conn.cursor()
 
     sqlite_cur.execute("""

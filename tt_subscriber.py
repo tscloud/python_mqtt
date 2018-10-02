@@ -1,9 +1,10 @@
 #!/usr/bin/env python2
 
 import paho.mqtt.client as mqtt
+import sqlite3
 
 MQTT_SERVER = "localhost"
-MQTT_PATH1 = "T1_channel"
+MQTT_PATH1 = "/test/htu21d"
 MQTT_PATH2 = "H1_channel"
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -19,15 +20,33 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
     # more callbacks, etc
+    
+    try:
+		
+	except Exception as e:
+		print e
+		print 'bad db stuff...exiting'
+		sys.exit()
 
-client = mqtt.Client()
-client.on_connect = on_connect
-client.on_message = on_message
+	finally:
+		sqlite_conn.close()
 
-client.connect(MQTT_SERVER, 1883, 60)
+try:
+	client = mqtt.Client()
+	client.on_connect = on_connect
+	client.on_message = on_message
 
-# Blocking call that processes network traffic, dispatches callbacks and
-# handles reconnecting.
-# Other loop*() functions are available that give a threaded interface and a
-# manual interface.
-client.loop_forever()
+	client.connect(MQTT_SERVER, 1883, 60)
+
+	# Blocking call that processes network traffic, dispatches callbacks and
+	# handles reconnecting.
+	# Other loop*() functions are available that give a threaded interface and a
+	# manual interface.
+	client.loop_forever()
+
+except KeyboardInterrupt:
+	print "User Cancelled (Ctrl C)"
+
+finally:
+	client.disconnect()
+	print "\nBye"
