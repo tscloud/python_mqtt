@@ -1,12 +1,13 @@
 #!/usr/bin/env python2
 
 import paho.mqtt.client as mqtt
-import sqlite3
+import sqlite3, ConfigParser
 from datetime import datetime, date
 
 MQTT_SERVER = "bigasspi"
 MQTT_PATH1 = "/test/htu21d"
 MQTT_PATH2 = "/test/bme280"
+DB_LOCATION = "/home/tscloud/mqtt_db/kegstats.db"
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -63,8 +64,19 @@ def on_message(client, userdata, msg):
         print "db prob...exiting on_message()"
 
 try:
+    # -- read config file
+    config = ConfigParser.RawConfigParser()
+    ### I think this is weird -- have to do this to make the options not convert to lowercase
+    config.optionxform = str
+    config.read(".subscriber_config.ini")
+
+    MQTT_SERVER = config.get("MQTT", "MQTT_SERVER")
+    MQTT_PATH1 = config.get("MQTT", "MQTT_PATH1")
+    MQTT_PATH2 = config.get("MQTT", "MQTT_PATH2")
+    DB_LOCATION = config.get("DB", "DB_LOCATION")
+
     # -- setup DB connection
-    sqlite_conn = sqlite3.connect("/home/tscloud/mqtt_db/kegstats.db")
+    sqlite_conn = sqlite3.connect(DB_LOCATION)
     sqlite_cur = sqlite_conn.cursor()
 
     client = mqtt.Client()
