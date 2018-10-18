@@ -17,6 +17,7 @@ def on_connect(client, userdata, flags, rc):
     # reconnect then subscriptions will be renewed.
     client.subscribe(MQTT_PATH1)
     client.subscribe(MQTT_PATH2)
+    client.subscribe(MQTT_PATH3)
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -73,6 +74,7 @@ try:
     MQTT_SERVER = config.get("MQTT", "MQTT_SERVER")
     MQTT_PATH1 = config.get("MQTT", "MQTT_PATH1")
     MQTT_PATH2 = config.get("MQTT", "MQTT_PATH2")
+    MQTT_PATH3 = config.get("MQTT", "MQTT_PATH3")
     DB_LOCATION = config.get("DB", "DB_LOCATION")
 
     # -- setup DB connection
@@ -90,6 +92,9 @@ try:
 	# Other loop*() functions are available that give a threaded interface and a
 	# manual interface.
     client.loop_forever()
+
+except KeyboardInterrupt as e:
+    print "...exiting"
 
 except Exception as e:
     print e
