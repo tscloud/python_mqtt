@@ -73,8 +73,8 @@ try:
 
     MQTT_SERVER = config.get("MQTT", "MQTT_SERVER")
     MQTT_PATH1 = config.get("MQTT", "MQTT_PATH1")
-    MQTT_PATH2 = config.get("MQTT", "MQTT_PATH2")
-    MQTT_PATH3 = config.get("MQTT", "MQTT_PATH3")
+    #MQTT_PATH2 = config.get("MQTT", "MQTT_PATH2")
+    #MQTT_PATH3 = config.get("MQTT", "MQTT_PATH3")
     DB_LOCATION = config.get("DB", "DB_LOCATION")
 
     # -- setup DB connection
